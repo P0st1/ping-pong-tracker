@@ -3,6 +3,7 @@ import json
 from datetime import datetime
 from pathlib import Path
 import pandas as pd
+import uuid
 
 DATA_FILE = Path("scores.json")
 
@@ -11,7 +12,13 @@ if DATA_FILE.exists():
 else:
     scores = {"matches": []}
 
-players = ["Gregi", "Tomi", "Brina"]
+# Add this 👇
+for match in scores["matches"]:
+    if "id" not in match:
+        match["id"] = str(uuid.uuid4())
+DATA_FILE.write_text(json.dumps(scores, indent=2))
+
+players = ["Gregi", "Tomi", "Brina", "Nejc"]
 
 st.title("🏓 Ping Pong Score Tracker")
 
@@ -32,6 +39,7 @@ if password == "olly":
                 st.error("One player must have at least 11 points and win by 2.")
             else:
                 scores["matches"].append({
+                    "id": str(uuid.uuid4()),
                     "p1": p1, "p2": p2,
                     "score1": int(s1), "score2": int(s2),
                     "date": str(datetime.now())
@@ -101,7 +109,7 @@ df = pd.DataFrame(scores["matches"])
 if not df.empty:
     df["point_diff"] = df["score1"] - df["score2"]
     df = df[["p1", "score1", "p2", "score2", "date"]]
-    df["date"] = pd.to_datetime(df["date"]).dt.strftime("%d-%m-%Y")
+    df["date"] = pd.to_datetime(df["date"]).dt.strftime("%d-%m-%Y %H:%M")
 
     # Leaderboard data
     data = []
@@ -207,7 +215,7 @@ if not df.empty:
         p1 = longest_match["p1"]
         p2 = longest_match["p2"]
         score_str = f"{longest_match['score1']}-{longest_match['score2']}"
-        date_str = pd.to_datetime(longest_match["date"]).strftime("%d-%m-%Y")
+        date_str = pd.to_datetime(longest_match["date"]).strftime("%d-%m-%Y %H:%M")
 
         st.subheader("⏱️ Longest Match (Most Points Played)")
         st.write(f"{p1} vs {p2} — {score_str} ({longest_points} points) on {date_str}")
@@ -221,6 +229,42 @@ if not df.empty:
         "Player": players,
         "Longest Win Streak": [longest_streaks[p] for p in players]
     }), hide_index=True)
+
+# 💀 Loser of the Month (most losses in current month)
+current_month = pd.Timestamp.now().to_period("M")
+losses_this_month = {p: 0 for p in players}
+
+for m in scores["matches"]:
+    match_month = pd.to_datetime(m["date"]).to_period("M")
+    if match_month == current_month:
+        if m["score1"] > m["score2"]:
+            losses_this_month[m["p2"]] += 1
+        else:
+            losses_this_month[m["p1"]] += 1
+
+loser_of_month = max(losses_this_month, key=losses_this_month.get)
+st.markdown(f"💀 **Loser of the Month:** {loser_of_month}")
+
+st.markdown(f"💀 **Actual Loser:** nibber")
+# 🔒 Delete Match Section (Admin Only)
+st.subheader("🗑️ Delete a Match")
+
+delete_password = st.text_input("Enter admin password to delete", type="password")
+if delete_password == "johnny":
+    match_options = [
+        f"{m['p1']} {m['score1']}-{m['score2']} {m['p2']} on {pd.to_datetime(m['date']).strftime('%d-%m-%Y')} (ID: {m['id']})"
+        for m in scores["matches"]
+    ]
+    selected = st.selectbox("Select a match to delete", match_options)
+    if st.button("Delete Selected Match"):
+        match_id = selected.split("ID: ")[-1].replace(")", "")
+        scores["matches"] = [m for m in scores["matches"] if m["id"] != match_id]
+        DATA_FILE.write_text(json.dumps(scores, indent=2))
+        st.success("Match deleted!")
+        st.rerun()
+else:
+    st.info("Enter password to unlock delete feature")
+
 
 
     
