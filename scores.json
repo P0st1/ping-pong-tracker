@@ -1,56 +1,25 @@
-{
-  "matches": [
-    {
-      "p1": "Gregi",
-      "p2": "Brina",
-      "score1": 11,
-      "score2": 9,
-      "date": "2025-06-13 21:50:19.476391",
-      "id": "5e214c14-5eb6-494e-aa6c-1c7db78c3d0f"
-    },
-    {
-      "p1": "Gregi",
-<<<<<<< HEAD
-      "p2": "Tomi",
-      "score1": 13,
-      "score2": 11,
-      "date": "2025-06-13 21:50:37.559896",
-      "id": "6f8984e5-b8cd-4bb0-9a60-8a95cd75c703"
-    },
-    {
-      "p1": "Gregi",
-      "p2": "Tomi",
-      "score1": 11,
-      "score2": 9,
-      "date": "2025-06-13 21:56:22.660514",
-      "id": "3ba28177-a7c5-436c-b5c2-8ce869621fb4"
-=======
-      "p2": "Brina",
-      "score1": 12,
-      "score2": 14,
-      "date": "2025-06-13 21:50:37.559896"
-    },
-    {
-      "p1": "Gregi",
-      "p2": "Brina",
-      "score1": 12,
-      "score2": 10,
-      "date": "2025-06-13 21:50:41.806452"
-    },
-    {
-      "p1": "Gregi",
-      "p2": "Brina",
-      "score1": 12,
-      "score2": 10,
-      "date": "2025-06-13 21:56:22.660514"
-    },
-    {
-      "p1": "Gregi",
-      "p2": "Brina",
-      "score1": 5,
-      "score2": 11,
-      "date": "2025-06-13 21:56:32.293359"
->>>>>>> 9927907d460e5c351fd9b7c07a2c0166ea5c24f3
-    }
-  ]
-}
+[
+  {"p1":"Gregi","score1":11,"p2":"Brina","score2":9,"date":"2025-06-13"},
+  {"p1":"Gregi","score1":12,"p2":"Brina","score2":14,"date":"2025-06-13"},
+  {"p1":"Brina","score1":3,"p2":"Tomi","score2":11,"date":"2025-06-13"},
+  {"p1":"Brina","score1":11,"p2":"Tomi","score2":5,"date":"2025-06-13"},
+  {"p1":"Brina","score1":11,"p2":"Gregi","score2":5,"date":"2025-06-13"},
+  {"p1":"Brina","score1":12,"p2":"Tomi","score2":10,"date":"2025-06-13"},
+  {"p1":"Brina","score1":11,"p2":"Gregi","score2":5,"date":"2025-06-13"},
+  {"p1":"Gregi","score1":7,"p2":"Brina","score2":11,"date":"2025-06-13"},
+  {"p1":"Gregi","score1":7,"p2":"Brina","score2":11,"date":"2025-06-13"},
+  {"p1":"Gregi","score1":9,"p2":"Brina","score2":11,"date":"2025-06-13"},
+  {"p1":"Gregi","score1":11,"p2":"Brina","score2":9,"date":"2025-06-13"},
+  {"p1":"Gregi","score1":11,"p2":"Brina","score2":7,"date":"2025-06-13"},
+  {"p1":"Gregi","score1":4,"p2":"Brina","score2":11,"date":"2025-06-13"},
+  {"p1":"Gregi","score1":7,"p2":"Tomi","score2":11,"date":"2025-06-13"},
+  {"p1":"Gregi","score1":9,"p2":"Tomi","score2":11,"date":"2025-06-13"},
+  {"p1":"Gregi","score1":13,"p2":"Tomi","score2":11,"date":"2025-06-13"},
+  {"p1":"Gregi","score1":13,"p2":"Tomi","score2":15,"date":"2025-06-13"},
+  {"p1":"Gregi","score1":11,"p2":"Tomi","score2":6,"date":"2025-06-13"},
+  {"p1":"Gregi","score1":5,"p2":"Brina","score2":11,"date":"2025-06-13"},
+  {"p1":"Gregi","score1":12,"p2":"Brina","score2":10,"date":"2025-06-13"},
+  {"p1":"Gregi","score1":12,"p2":"Brina","score2":10,"date":"2025-06-13"},
+  {"p1":"Brina","score1":11,"p2":"Gregi","score2":5,"date":"2025-06-13"}
+]
+
