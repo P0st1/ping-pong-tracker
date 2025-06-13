@@ -26,28 +26,59 @@ st.title("🏓 Ping Pong Score Tracker")
 password = st.text_input("Enter password to add match", type="password")
 
 if password == "olly":
+    letter_to_player = {"G": "Gregi", "T": "Tomi", "B": "Brina", "N": "Nejc"}
+
     with st.form("match_form"):
-        p1 = st.selectbox("Player 1", players)
-        p2 = st.selectbox("Player 2", [p for p in players if p != p1])
+        p1_key = st.text_input("Player 1 (G - Gregi, T - Tomi, B - Brina, N - Nejc)", max_chars=1, placeholder="Vpiši samo začetnico imena!").upper()
+        p2_key = st.text_input("Player 2 (G - Gregi, T - Tomi, B - Brina, N - Nejc)", max_chars=1, placeholder="Vpiši samo začetnico imena!").upper()
         s1 = st.number_input("Player 1 Score", min_value=0, step=1)
         s2 = st.number_input("Player 2 Score", min_value=0, step=1)
         submitted = st.form_submit_button("Submit")
 
         if submitted:
-            diff = abs(s1 - s2)
-            if (s1 < 11 and s2 < 11) or diff < 2:
-                st.error("One player must have at least 11 points and win by 2.")
+            p1 = letter_to_player.get(p1_key)
+            p2 = letter_to_player.get(p2_key)
+
+            if not p1 or not p2:
+                st.error("Invalid player initials! Use G, T, B, or N.")
+            elif p1 == p2:
+                st.error("Players must be different.")
             else:
-                scores["matches"].append({
-                    "id": str(uuid.uuid4()),
-                    "p1": p1, "p2": p2,
-                    "score1": int(s1), "score2": int(s2),
-                    "date": datetime.now().strftime("%Y-%m-%d")
-                })
-                DATA_FILE.write_text(json.dumps(scores, indent=2))
-                st.success("Match saved!")
+                diff = abs(s1 - s2)
+                if s1 < 11 and s2 < 11:
+                    st.error("One player must have at least 11 points.")
+                elif s1 >= 11 and s2 >= 11:
+                    if diff != 2:
+                        st.error("If both players have 11 or more points, the difference must be exactly 2.")
+                    else:
+                        # Save match
+                        scores["matches"].append({
+                            "id": str(uuid.uuid4()),
+                            "p1": p1, "p2": p2,
+                            "score1": int(s1), "score2": int(s2),
+                            "date": datetime.now().strftime("%Y-%m-%d")
+                        })
+                        DATA_FILE.write_text(json.dumps(scores, indent=2))
+                        st.success("Match saved!")
+                else:
+                    # At least one player under 11, diff must be >=2
+                    if diff < 2:
+                        st.error("Winner must win by at least 2 points.")
+                    else:
+                        # Save match
+                        scores["matches"].append({
+                            "id": str(uuid.uuid4()),
+                            "p1": p1, "p2": p2,
+                            "score1": int(s1), "score2": int(s2),
+                            "date": datetime.now().strftime("%Y-%m-%d")
+                        })
+                        DATA_FILE.write_text(json.dumps(scores, indent=2))
+                        st.success("Match saved!")
 else:
     st.info("Enter password to add matches")
+
+
+
 
 # Stats calculation
 wins = {p: 0 for p in players}
@@ -176,9 +207,13 @@ if not df.empty:
     h2h_df = pd.DataFrame(h2h_data, columns=players, index=players)
     st.dataframe(h2h_df)
 
-    # Last 5 matches
+    # Last 5 matches (based on order added)
     st.subheader("⏳ Last 5 Matches")
-    st.dataframe(df.sort_values(by="date", ascending=False).head(5), hide_index=True)
+    last_5 = pd.DataFrame(scores["matches"][-5:][::-1])
+    last_5["date"] = pd.to_datetime(last_5["date"]).dt.strftime("%Y-%m-%d")
+    last_5["point_diff"] = last_5["score1"] - last_5["score2"]
+    last_5 = last_5[["p1", "score1", "p2", "score2", "date"]]
+    st.dataframe(last_5, hide_index=True)
 
     # Monthly leaderboard
     df_dates = pd.to_datetime([m["date"] for m in scores["matches"]])
