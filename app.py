@@ -42,7 +42,7 @@ if password == "olly":
                     "id": str(uuid.uuid4()),
                     "p1": p1, "p2": p2,
                     "score1": int(s1), "score2": int(s2),
-                    "date": str(datetime.now())
+                    "date": datetime.now().strftime("%Y-%m-%d")
                 })
                 DATA_FILE.write_text(json.dumps(scores, indent=2))
                 st.success("Match saved!")
@@ -109,7 +109,8 @@ df = pd.DataFrame(scores["matches"])
 if not df.empty:
     df["point_diff"] = df["score1"] - df["score2"]
     df = df[["p1", "score1", "p2", "score2", "date"]]
-    df["date"] = pd.to_datetime(df["date"]).dt.strftime("%d-%m-%Y %H:%M")
+    df["date"] = pd.to_datetime(df["date"], format="%Y-%m-%d")
+    df["date"] = df["date"].dt.strftime("%Y-%m-%d")
 
     # Leaderboard data
     data = []
@@ -190,7 +191,7 @@ if not df.empty:
         wins_month = {p: 0 for p in players}
         losses_month = {p: 0 for p in players}
         for m in scores["matches"]:
-            m_date = pd.to_datetime(m["date"]).to_period("M")
+            m_date = pd.to_datetime(m["date"], format="%Y-%m-%d").to_period("M")
             if m_date == month:
                 if m["score1"] > m["score2"]:
                     wins_month[m["p1"]] += 1
@@ -215,7 +216,7 @@ if not df.empty:
         p1 = longest_match["p1"]
         p2 = longest_match["p2"]
         score_str = f"{longest_match['score1']}-{longest_match['score2']}"
-        date_str = pd.to_datetime(longest_match["date"]).strftime("%d-%m-%Y %H:%M")
+        date_str = pd.to_datetime(longest_match["date"], format="%Y-%m-%d").strftime("%d-%m-%Y")
 
         st.subheader("⏱️ Longest Match (Most Points Played)")
         st.write(f"{p1} vs {p2} — {score_str} ({longest_points} points) on {date_str}")
@@ -256,7 +257,8 @@ st.subheader("🗑️ Delete a Match")
 delete_password = st.text_input("Enter admin password to delete", type="password")
 if delete_password == "johnny":
     match_options = [
-        f"{m['p1']} {m['score1']}-{m['score2']} {m['p2']} on {pd.to_datetime(m['date']).strftime('%d-%m-%Y')} (ID: {m['id']})"
+        f"{m['p1']} {m['score1']}-{m['score2']} {m['p2']} on {pd.to_datetime(m['date'], format='%Y-%m-%d').strftime('%d-%m-%Y')
+} (ID: {m['id']})"
         for m in scores["matches"]
     ]
     selected = st.selectbox("Select a match to delete", match_options)
@@ -268,8 +270,3 @@ if delete_password == "johnny":
         st.rerun()
 else:
     st.info("Enter password to unlock delete feature")
-
-
-
-
-    
