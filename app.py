@@ -74,10 +74,6 @@ if password == "olly":
                         })
                         DATA_FILE.write_text(json.dumps(scores, indent=2))
                         st.success("Match saved!")
-else:
-    st.info("Enter password to add matches")
-
-
 
 
 # Stats calculation
@@ -147,6 +143,8 @@ if not df.empty:
     data = []
     for p in players:
         total = wins[p] + losses[p]
+        if total == 0:
+            continue
         win_pct = (wins[p] / total * 100) if total > 0 else 0
         ot_total = overtime_wins[p] + overtime_losses[p]
         ot_win_pct = (overtime_wins[p] / ot_total * 100) if ot_total > 0 else 0
@@ -183,7 +181,9 @@ if not df.empty:
 
     # Head-to-Head (H2H) matrix
     st.subheader("🤼 Head-to-Head Comparison")
-    h2h = {p: {o: {"W": 0, "L": 0} for o in players if o != p} for p in players}
+    active_players = [p for p in players if (wins[p] + losses[p]) > 0]
+
+    h2h = {p: {o: {"W": 0, "L": 0} for o in active_players if o != p} for p in active_players}
 
     for m in scores["matches"]:
         if m["score1"] > m["score2"]:
@@ -194,9 +194,9 @@ if not df.empty:
             h2h[m["p1"]][m["p2"]]["L"] += 1
 
     h2h_data = []
-    for p1 in players:
+    for p1 in active_players:
         row = []
-        for p2 in players:
+        for p2 in active_players:
             if p1 == p2:
                 row.append("-")
             else:
@@ -204,7 +204,7 @@ if not df.empty:
                 row.append(f"{rec['W']}-{rec['L']}")
         h2h_data.append(row)
 
-    h2h_df = pd.DataFrame(h2h_data, columns=players, index=players)
+    h2h_df = pd.DataFrame(h2h_data, columns=active_players, index=active_players)
     st.dataframe(h2h_df)
 
     # Last 5 matches (based on order added)
@@ -220,13 +220,15 @@ if not df.empty:
     months = df_dates.to_period("M").unique()
 
     st.subheader("📅 Monthly Leaderboard (Wins / Losses)")
+
     for month in months:
         month_str = month.strftime("%B %Y")
         st.markdown(f"**{month_str}**")
-        wins_month = {p: 0 for p in players}
-        losses_month = {p: 0 for p in players}
+        wins_month = {p: 0 for p in active_players}
+        losses_month = {p: 0 for p in active_players}
+
         for m in scores["matches"]:
-            m_date = pd.to_datetime(m["date"], format="%Y-%m-%d").to_period("M")
+            m_date = pd.to_datetime(m["date"]).to_period("M")
             if m_date == month:
                 if m["score1"] > m["score2"]:
                     wins_month[m["p1"]] += 1
@@ -234,15 +236,22 @@ if not df.empty:
                 else:
                     wins_month[m["p2"]] += 1
                     losses_month[m["p1"]] += 1
+
         data = []
-        for p in players:
+        for p in active_players:
             data.append({"Player": p, "Wins": wins_month[p], "Losses": losses_month[p]})
         month_df = pd.DataFrame(data).sort_values(by="Wins", ascending=False)
         st.dataframe(month_df, use_container_width=True, hide_index=True)
 
+
     # Match Table (all matches)
     st.subheader("📊 Match Table")
-    st.dataframe(df.sort_values(by="date", ascending=False), height=300, hide_index=True)
+    all_matches = pd.DataFrame(scores["matches"][::-1])  
+    all_matches["date"] = pd.to_datetime(all_matches["date"]).dt.strftime("%Y-%m-%d")
+    all_matches["point_diff"] = all_matches["score1"] - all_matches["score2"]
+    all_matches = all_matches[["p1", "score1", "p2", "score2", "date"]]
+    st.dataframe(all_matches, height=300, hide_index=True)
+
 
     # Longest match
     if scores["matches"]:
@@ -261,9 +270,10 @@ if not df.empty:
     st.write(
         "Longest winning streak per player based on consecutive match wins:"
     )
+
     st.dataframe(pd.DataFrame({
-        "Player": players,
-        "Longest Win Streak": [longest_streaks[p] for p in players]
+        "Player": active_players,
+        "Longest Win Streak": [longest_streaks[p] for p in active_players]
     }), hide_index=True)
 
 # 💀 Loser of the Month (most losses in current month)
@@ -279,12 +289,12 @@ for m in scores["matches"]:
             losses_this_month[m["p1"]] += 1
 
 loser_of_month = max(losses_this_month, key=losses_this_month.get)
-st.markdown(f"💀 **Loser of the Month:** {loser_of_month}")
+st.markdown(f" **Most Losses This Month:** {loser_of_month}")
 
 st.markdown(f"💀 **Actual Loser:** nibber")
 
 total_matches = len(scores["matches"])
-st.write(f"**Total matches played:** {total_matches}")
+st.write(f"**All time total matches played:** {total_matches}")
 
 # 🔒 Delete Match Section (Admin Only)
 st.subheader("🗑️ Delete a Match")
@@ -303,5 +313,3 @@ if delete_password == "johnny":
         DATA_FILE.write_text(json.dumps(scores, indent=2))
         st.success("Match deleted!")
         st.rerun()
-else:
-    st.info("Enter password to unlock delete feature")
