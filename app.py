@@ -173,7 +173,7 @@ if not df.empty:
         h2h_data.append(row)
 
     h2h_df = pd.DataFrame(h2h_data, columns=players, index=players)
-    st.dataframe(h2h_df, hide_index=True)
+    st.dataframe(h2h_df)
 
     # Last 5 matches
     st.subheader("⏳ Last 5 Matches")
@@ -246,6 +246,10 @@ loser_of_month = max(losses_this_month, key=losses_this_month.get)
 st.markdown(f"💀 **Loser of the Month:** {loser_of_month}")
 
 st.markdown(f"💀 **Actual Loser:** nibber")
+
+total_matches = len(scores["matches"])
+st.write(f"**Total matches played:** {total_matches}")
+
 # 🔒 Delete Match Section (Admin Only)
 st.subheader("🗑️ Delete a Match")
 
@@ -264,6 +268,7 @@ if delete_password == "johnny":
         st.rerun()
 else:
     st.info("Enter password to unlock delete feature")
+
 
 
 

@@ -2,55 +2,147 @@
   "matches": [
     {
       "p1": "Gregi",
-      "p2": "Brina",
       "score1": 11,
+      "p2": "Brina",
       "score2": 9,
-      "date": "2025-06-13 21:50:19.476391",
-      "id": "5e214c14-5eb6-494e-aa6c-1c7db78c3d0f"
+      "date": "2025-06-13",
+      "id": "b9e638a8-92e9-420a-aa86-ff0d1f12f2b6"
     },
     {
-      "p1": "Gregi",
-<<<<<<< HEAD
+      "p1": "Brina",
+      "score1": 3,
       "p2": "Tomi",
-      "score1": 13,
       "score2": 11,
-      "date": "2025-06-13 21:50:37.559896",
-      "id": "6f8984e5-b8cd-4bb0-9a60-8a95cd75c703"
+      "date": "2025-06-13",
+      "id": "dc8ee95b-c705-4a6e-bbe9-cd81e64c8b83"
+    },
+    {
+      "p1": "Brina",
+      "score1": 11,
+      "p2": "Tomi",
+      "score2": 5,
+      "date": "2025-06-13",
+      "id": "41288280-4f74-49ae-ae4b-4bf5a9fb3c67"
     },
     {
       "p1": "Gregi",
-      "p2": "Tomi",
-      "score1": 11,
-      "score2": 9,
-      "date": "2025-06-13 21:56:22.660514",
-      "id": "3ba28177-a7c5-436c-b5c2-8ce869621fb4"
-=======
-      "p2": "Brina",
       "score1": 12,
+      "p2": "Brina",
       "score2": 14,
-      "date": "2025-06-13 21:50:37.559896"
+      "date": "2025-06-13",
+      "id": "a66b778d-0bf3-46a3-9a81-0cb11ff02de0"
     },
     {
       "p1": "Gregi",
+      "score1": 11,
       "p2": "Brina",
-      "score1": 12,
-      "score2": 10,
-      "date": "2025-06-13 21:50:41.806452"
+      "score2": 7,
+      "date": "2025-06-13",
+      "id": "7c14351e-b7a7-4ef3-8b51-0234bd74c428"
+    },
+    {
+      "p1": "Brina",
+      "score1": 11,
+      "p2": "Gregi",
+      "score2": 5,
+      "date": "2025-06-13",
+      "id": "57108a4d-03df-4049-b609-e491e4c4b75c"
     },
     {
       "p1": "Gregi",
+      "score1": 7,
       "p2": "Brina",
-      "score1": 12,
-      "score2": 10,
-      "date": "2025-06-13 21:56:22.660514"
-    },
-    {
-      "p1": "Gregi",
-      "p2": "Brina",
-      "score1": 5,
       "score2": 11,
-      "date": "2025-06-13 21:56:32.293359"
->>>>>>> 9927907d460e5c351fd9b7c07a2c0166ea5c24f3
+      "date": "2025-06-13",
+      "id": "1bec610b-81d3-41db-9ceb-b3b86e03bd1b"
+    },
+    {
+      "p1": "Brina",
+      "score1": 12,
+      "p2": "Tomi",
+      "score2": 10,
+      "date": "2025-06-13",
+      "id": "ee4be5b1-91a4-4622-bb40-4d29c5eb7c17"
+    },
+    {
+      "p1": "Gregi",
+      "score1": 9,
+      "p2": "Brina",
+      "score2": 11,
+      "date": "2025-06-13",
+      "id": "4c676e3a-28e8-4321-b06f-bd13340e7e35"
+    },
+    {
+      "p1": "Gregi",
+      "score1": 11,
+      "p2": "Brina",
+      "score2": 9,
+      "date": "2025-06-13",
+      "id": "829ecdd4-0ae8-4a94-b2d4-87085c8dccd7"
+    },
+    {
+      "p1": "Gregi",
+      "score1": 4,
+      "p2": "Brina",
+      "score2": 11,
+      "date": "2025-06-13",
+      "id": "04894fb4-0768-4856-8cd8-9093dc02a2cb"
+    },
+    {
+      "p1": "Gregi",
+      "score1": 13,
+      "p2": "Tomi",
+      "score2": 11,
+      "date": "2025-06-13",
+      "id": "04385b59-911b-4292-b462-44a606bd707c"
+    },
+    {
+      "p1": "Gregi",
+      "score1": 11,
+      "p2": "Tomi",
+      "score2": 6,
+      "date": "2025-06-13",
+      "id": "3a9f99c2-7b86-4149-bd04-10f89447ec76"
+    },
+    {
+      "p1": "Gregi",
+      "score1": 7,
+      "p2": "Tomi",
+      "score2": 11,
+      "date": "2025-06-13",
+      "id": "44a4ad85-f7ad-46c5-a282-6aa7ee4398d1"
+    },
+    {
+      "p1": "Gregi",
+      "score1": 9,
+      "p2": "Tomi",
+      "score2": 11,
+      "date": "2025-06-13",
+      "id": "2ee8f281-c89b-4ee6-8019-e4751ca596c4"
+    },
+    {
+      "p1": "Gregi",
+      "score1": 12,
+      "p2": "Brina",
+      "score2": 10,
+      "date": "2025-06-13",
+      "id": "dd07cf51-cc7d-49ef-9d5b-d49692494f49"
+    },
+    {
+      "p1": "Gregi",
+      "score1": 13,
+      "p2": "Tomi",
+      "score2": 15,
+      "date": "2025-06-13",
+      "id": "aad32bbd-070e-4bd6-9a71-e002bb9d08ce"
+    },
+    {
+      "p1": "Gregi",
+      "score1": 12,
+      "p2": "Brina",
+      "score2": 10,
+      "date": "2025-06-13",
+      "id": "51b09b87-9fb7-4de9-a253-d40dfd5f069d"
     }
   ]
 }
