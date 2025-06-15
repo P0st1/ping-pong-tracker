@@ -4,19 +4,17 @@ from datetime import datetime
 from pathlib import Path
 import pandas as pd
 import uuid
+import os
+from supabase import create_client, Client
 
-DATA_FILE = Path("scores.json")
 
-if DATA_FILE.exists():
-    scores = json.loads(DATA_FILE.read_text())
-else:
-    scores = {"matches": []}
+url = st.secrets["SUPABASE_URL"]
+key = st.secrets["SUPABASE_KEY"]
+supabase = create_client(url, key)
 
-# Add this 👇
-for match in scores["matches"]:
-    if "id" not in match:
-        match["id"] = str(uuid.uuid4())
-DATA_FILE.write_text(json.dumps(scores, indent=2))
+# Load matches from Supabase
+response = supabase.table("matches").select("*").execute()
+scores = {"matches": response.data if response.data else []}
 
 players = ["Gregi", "Tomi", "Brina", "Nejc"]
 
@@ -52,29 +50,28 @@ if password == "olly":
                         st.error("If both players have 11 or more points, the difference must be exactly 2.")
                     else:
                         # Save match
-                        scores["matches"].append({
+                        supabase.table("matches").insert({
                             "id": str(uuid.uuid4()),
                             "p1": p1, "p2": p2,
                             "score1": int(s1), "score2": int(s2),
                             "date": datetime.now().strftime("%Y-%m-%d")
-                        })
-                        DATA_FILE.write_text(json.dumps(scores, indent=2))
+                        }).execute()
                         st.success("Match saved!")
+                        st.rerun()
                 else:
                     # At least one player under 11, diff must be >=2
                     if diff < 2:
                         st.error("Winner must win by at least 2 points.")
                     else:
                         # Save match
-                        scores["matches"].append({
+                        supabase.table("matches").insert({
                             "id": str(uuid.uuid4()),
                             "p1": p1, "p2": p2,
                             "score1": int(s1), "score2": int(s2),
                             "date": datetime.now().strftime("%Y-%m-%d")
-                        })
-                        DATA_FILE.write_text(json.dumps(scores, indent=2))
+                        }).execute()
                         st.success("Match saved!")
-
+                        st.rerun()
 
 # Stats calculation
 wins = {p: 0 for p in players}
@@ -309,7 +306,6 @@ if delete_password == "johnny":
     selected = st.selectbox("Select a match to delete", match_options)
     if st.button("Delete Selected Match"):
         match_id = selected.split("ID: ")[-1].replace(")", "")
-        scores["matches"] = [m for m in scores["matches"] if m["id"] != match_id]
-        DATA_FILE.write_text(json.dumps(scores, indent=2))
+        supabase.table("matches").delete().eq("id", match_id).execute()
         st.success("Match deleted!")
         st.rerun()
