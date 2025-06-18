@@ -204,13 +204,24 @@ if not df.empty:
     h2h_df = pd.DataFrame(h2h_data, columns=active_players, index=active_players)
     st.dataframe(h2h_df)
 
+    def highlight_winner(row):
+        color = []
+        if row["score1"] > row["score2"]:
+            color = ["color: green", "color: green", "color: red", "color: red", ""]
+        elif row["score2"] > row["score1"]:
+            color = ["color: red", "color: red", "color: green", "color: green", ""]
+        else:
+            color = [""] * 5
+        return color
+    
     # Last 5 matches (based on order added)
     st.subheader("⏳ Last 5 Matches")
     last_5 = pd.DataFrame(scores["matches"][-5:][::-1])
     last_5["date"] = pd.to_datetime(last_5["date"]).dt.strftime("%Y-%m-%d")
     last_5["point_diff"] = last_5["score1"] - last_5["score2"]
     last_5 = last_5[["p1", "score1", "p2", "score2", "date"]]
-    st.dataframe(last_5, hide_index=True)
+    last_5_styled = last_5.style.apply(highlight_winner, axis=1)
+    st.dataframe(last_5_styled, hide_index=True)
 
     # Monthly leaderboard
     df_dates = pd.to_datetime([m["date"] for m in scores["matches"]])
@@ -240,15 +251,14 @@ if not df.empty:
         month_df = pd.DataFrame(data).sort_values(by="Wins", ascending=False)
         st.dataframe(month_df, use_container_width=True, hide_index=True)
 
-
     # Match Table (all matches)
     st.subheader("📊 Match Table")
     all_matches = pd.DataFrame(scores["matches"][::-1])  
     all_matches["date"] = pd.to_datetime(all_matches["date"]).dt.strftime("%Y-%m-%d")
     all_matches["point_diff"] = all_matches["score1"] - all_matches["score2"]
     all_matches = all_matches[["p1", "score1", "p2", "score2", "date"]]
-    st.dataframe(all_matches, height=300, hide_index=True)
-
+    all_matches_styled = all_matches.style.apply(highlight_winner, axis=1)
+    st.dataframe(all_matches_styled, height=300, hide_index=True)
 
     # Longest match
     if scores["matches"]:
